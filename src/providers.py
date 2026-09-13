@@ -38,7 +38,22 @@ class MockOfflineProvider(BaseLLMProvider):
         prompt_lower = prompt.lower()
         
         # Mô phỏng nhận diện intent gọi Tool
-        if ("vf2026001" in prompt_lower or "sv2026001" in prompt_lower) and ("đặt lịch" in prompt_lower or "hẹn" in prompt_lower):
+        if "[kết quả quan sát" in prompt_lower or "observation" in prompt_lower:
+            if "academic_query" in prompt_lower and ("đặt lịch" in prompt_lower or "hẹn" in prompt_lower):
+                return {
+                    "type": "tool_call",
+                    "tool_name": "schedule_appointment",
+                    "arguments": {"employee_id": "VF2026001", "student_id": "VF2026001", "datetime_str": "14:00 16/09/2026", "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast", "purpose": "Trao đổi về chế độ ngày phép"},
+                    "thought": "Đã có thông tin cán bộ phụ trách là Trần Thị Mai từ bước 1. Tiếp tục gọi tool schedule_appointment để hoàn tất việc đặt lịch."
+                }
+            else:
+                return {
+                    "type": "text",
+                    "content": "Tôi đã tiếp nhận đầy đủ dữ liệu từ hệ thống và hoàn tất xử lý yêu cầu cho bạn.",
+                    "thought": "Đã nhận được dữ liệu quan sát từ MCP Server. Tổng hợp câu trả lời cho nhân viên."
+                }
+
+        if ("vf2026001" in prompt_lower or "sv2026001" in prompt_lower) and ("đặt lịch" in prompt_lower or "hẹn" in prompt_lower) and "tra cứu" not in prompt_lower and "kiểm tra" not in prompt_lower:
             emp_id = "VF2026001" if "vf2026001" in prompt_lower else "SV2026001"
             return {
                 "type": "tool_call",
