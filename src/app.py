@@ -166,7 +166,6 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
                 "output": final_answer,
                 "latency_ms": 10.0
             })
-            break
 
     return trace_logs
 
