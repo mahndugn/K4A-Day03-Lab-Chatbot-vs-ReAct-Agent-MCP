@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Chào bạn, quy chế nhân sự VinFast quy định nhân viên chính thức có bao nhiêu ngày phép năm và được hưởng những chế độ phúc lợi gì?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ System Prompt về quy chế và quyền lợi, không cần gọi bất kỳ Tool nào.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Hãy tra cứu thông tin hồ sơ và số ngày phép còn lại của nhân viên VF2026001.",
+    "expected_behavior": "Agent nhận diện nhu cầu tra cứu nhân sự, tự động phát sinh Tool Call 'academic_query' với mã VF2026001.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "appointment_booking",
+    "question": "Tôi là nhân viên VF2026001, hãy đặt giúp tôi lịch hẹn làm việc với Ban Nhân sự vào lúc 09:00 ngày 15/09/2026 để tư vấn chế độ bảo hiểm sức khỏe Vinmec.",
+    "expected_behavior": "Agent tự động phát sinh Tool Call 'schedule_appointment' với đúng thời gian, mã nhân viên VF2026001 và mục đích hẹn.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Tôi là nhân viên VF2026001, hãy kiểm tra xem cán bộ nhân sự phụ trách tôi là ai, sau đó đặt lịch hẹn với cán bộ đó vào lúc 14:00 ngày 16/09/2026 để trao đổi về chế độ ngày phép.",
+    "expected_behavior": "Agent thực hiện chuỗi suy luận ReAct đa bước: Tra cứu cán bộ nhân sự phụ trách của nhân viên trước (Trần Thị Mai), sau đó tiến hành đặt lịch hẹn với đúng cán bộ đó.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Hãy kiểm tra thông tin nhân viên có mã VF9999999 và số ngày phép của họ.",
+    "expected_behavior": "Agent nhận kết quả NOT_FOUND từ Tool và đưa ra phản hồi lịch sự, chính xác không bịa đặt dữ liệu (Anti-Hallucination).",
+    "complexity": "Medium"
+  }
+]

@@ -121,17 +121,26 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
                 if obs_data.get("status") == "SUCCESS":
                     if "data" in obs_data:
                         d = obs_data["data"]
-                        final_answer = (
-                            f"Kết quả tra cứu cho sinh viên {obs_data.get('student_id', '')} ({d.get('full_name', '')}): "
-                            f"Lớp {d.get('class', '')}, GPA: {d.get('gpa', '')}, Email: {d.get('email', '')}, "
-                            f"Trạng thái: {d.get('status', '')}, Cố vấn: {d.get('advisor', '')}."
-                        )
+                        target_id = obs_data.get("employee_id") or obs_data.get("student_id", "")
+                        if "department" in d:
+                            final_answer = (
+                                f"Kết quả tra cứu nhân sự VinFast cho nhân viên {target_id} ({d.get('full_name', '')}): "
+                                f"Khối/Phòng ban: {d.get('department', '')}, Chức vụ: {d.get('role', '')}, "
+                                f"Số ngày phép còn lại: {d.get('leave_balance', 0)} ngày, Email: {d.get('email', '')}, "
+                                f"Trạng thái: {d.get('status', '')}, Cán bộ HR phụ trách: {d.get('hr_officer', '')}."
+                            )
+                        else:
+                            final_answer = (
+                                f"Kết quả tra cứu cho sinh viên {target_id} ({d.get('full_name', '')}): "
+                                f"Lớp {d.get('class', '')}, GPA: {d.get('gpa', '')}, Email: {d.get('email', '')}, "
+                                f"Trạng thái: {d.get('status', '')}, Cố vấn: {d.get('advisor', '')}."
+                            )
                     elif "message" in obs_data:
                         final_answer = obs_data["message"]
                     else:
                         final_answer = f"Đã hoàn tất xử lý qua MCP Server: {json.dumps(obs_data, ensure_ascii=False)}"
                 elif obs_data.get("status") == "NOT_FOUND":
-                    final_answer = obs_data.get("message", "Không tìm thấy thông tin sinh viên yêu cầu.")
+                    final_answer = obs_data.get("message", "Không tìm thấy dữ liệu nhân viên / hồ sơ trong hệ thống.")
                 else:
                     final_answer = f"Phản hồi từ công cụ: {json.dumps(obs_data, ensure_ascii=False)}"
             
@@ -164,7 +173,7 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
 
 if __name__ == "__main__":
     print("==========================================================")
-    print("🏫 VINUNI AI COURSE - DAY 03 LAB: CHATBOT VS REACT AGENT")
+    print("🚗 VINFAST HR AI ASSISTANT - DAY 03 LAB: CHATBOT VS REACT AGENT")
     print("==========================================================")
     
     provider = get_llm_provider()
@@ -177,15 +186,15 @@ if __name__ == "__main__":
     print(f"✅ Đã tải thành công {len(tests)} Test Cases thử nghiệm.\n")
     
     if "--interactive" in sys.argv:
-        print("🎮 [INTERACTIVE MODE] Trò chuyện trực tiếp với ReAct Agent:")
+        print("🎮 [INTERACTIVE MODE] Trò chuyện trực tiếp với VinFast HR ReAct Agent:")
         print("💡 Gợi ý câu hỏi thử nghiệm:")
-        print("   - Câu hỏi chung: 'Quy chế học vụ VinUni yêu cầu bao nhiêu tín chỉ?'")
-        print("   - Tra cứu học vụ: 'Hãy tra cứu thông tin học vụ của sinh viên SV2026001'")
-        print("   - Đặt lịch hẹn: 'Đặt lịch hẹn tư vấn cho SV2026001 vào 14:00 ngày 15/09/2026'")
+        print("   - Câu hỏi chung: 'Chính sách nghỉ phép năm của VinFast quy định thế nào?'")
+        print("   - Tra cứu nhân sự: 'Hãy tra cứu thông tin và số ngày phép của nhân viên VF2026001'")
+        print("   - Đặt lịch hẹn HR: 'Đặt lịch hẹn làm việc cho VF2026001 vào 09:00 ngày 15/09/2026'")
         print("   - Gõ 'exit' hoặc 'quit' để kết thúc phiên trò chuyện.\n")
         while True:
             try:
-                user_input = input("👤 Sinh viên hỏi: ").strip()
+                user_input = input("👤 Nhân viên hỏi: ").strip()
                 if not user_input or user_input.lower() in ["exit", "quit"]:
                     print("👋 Tạm biệt! Kết thúc phiên trò chuyện.")
                     break

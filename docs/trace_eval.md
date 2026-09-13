@@ -1,8 +1,8 @@
 # 📊 BÁO CÁO THU HOẠCH NGHIỆM THU BÀI LAB 3 (BƯỚC 3 — SUBMISSION ARTIFACT)
 
-> **Họ và Tên Học viên:** [Điền Họ và Tên]  
-> **Mã Sinh Viên / Mã Học viên:** [Điền MSSV]  
-> **Chủ đề Lựa chọn:** [Điền tên chủ đề đã chọn từ docs/DANH_SACH_DE_TAI.md hoặc Đề tài Mở]  
+> **Họ và Tên Học viên:** [Điền Họ và Tên của bạn]  
+> **Mã Sinh Viên / Mã Học viên:** [Điền MSSV của bạn]  
+> **Chủ đề Lựa chọn:** Gợi ý 2.1 — Trợ lý Nhân sự VinFast (VinFast HR Assistant)  
 
 ---
 
@@ -10,11 +10,11 @@
 
 | Tiêu chí Đánh giá | Mức độ (1 - 5) | Giải trình chi tiết lý do chọn điểm |
 | :--- | :---: | :--- |
-| **1. Multi-step Reasoning** | / 5 | Bài toán có yêu cầu chia nhỏ nhiều bước suy luận nối tiếp nhau không? |
-| **2. Tool Interaction** | / 5 | Hệ thống có cần kết nối với MCP Server / Cơ sở dữ liệu bên ngoài không? |
-| **3. Dynamic Decision** | / 5 | Bước tiếp theo có phụ thuộc vào kết quả quan sát bước trước không? |
-| **4. Long Horizon Goal** | / 5 | Hệ thống có phải giữ mục tiêu xuyên suốt qua nhiều lượt xử lý không? |
-| **TỔNG ĐIỂM AGENTIC FIT** | **/ 20** | *Nếu tổng điểm > 12/20: Bài toán rất phù hợp triển khai Agentic System.* |
+| **1. Multi-step Reasoning** | **4 / 5** | Khi nhân viên yêu cầu kiểm tra cán bộ HR phụ trách rồi mới đặt lịch hẹn, Agent phải chia nhỏ 2 bước suy luận ReAct nối tiếp: (1) tra cứu hồ sơ nhân sự $\rightarrow$ (2) lấy tên cán bộ HR để đặt lịch làm việc. |
+| **2. Tool Interaction** | **5 / 5** | Hệ thống bắt buộc phải tương tác với MCP Server để truy vấn dữ liệu hồ sơ nhân sự/ngày phép và phát sinh mã đặt lịch `BK-...`, LLM thuần túy không thể tự biết. |
+| **3. Dynamic Decision** | **4 / 5** | Bước tiếp theo phụ thuộc hoàn toàn vào kết quả quan sát bước trước: Nếu mã nhân viên không tồn tại (`NOT_FOUND`), Agent dừng lại báo lỗi lịch sự; nếu tìm thấy hồ sơ thì mới tiếp tục tiến trình. |
+| **4. Long Horizon Goal** | **3 / 5** | Hệ thống duy trì mục tiêu giải quyết trọn vẹn yêu cầu của nhân viên từ khâu tra cứu, xử lý lịch hẹn đến xuất câu trả lời tổng hợp cuối cùng. |
+| **TỔNG ĐIỂM AGENTIC FIT** | **16 / 20** | *Tổng điểm 16/20 (> 12/20): Bài toán rất phù hợp triển khai hệ thống ReAct Agent.* |
 
 ---
 

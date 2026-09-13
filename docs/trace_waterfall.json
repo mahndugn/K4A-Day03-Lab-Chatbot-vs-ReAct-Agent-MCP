@@ -1,29 +1,152 @@
 [
   {
     "step": 1,
-    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "query": "Chào bạn, quy chế nhân sự VinFast quy định nhân viên chính thức có bao nhiêu ngày phép năm và được hưởng những chế độ phúc lợi gì?",
     "action_type": "FINAL_ANSWER",
-    "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool.",
-    "output": "[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-    "latency_ms": 2845.93
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Chào bạn, về quy chế nhân sự VinFast, nhân viên chính thức được hưởng 12 ngày phép năm. Ngoài ra, các chế độ phúc lợi khác sẽ tùy thuộc vào từng vị trí và chính sách hiện hành của công ty. Để biết thông tin chi tiết về các chế độ phúc lợi cụ thể áp dụng cho trường hợp của bạn, bạn có thể đặt lịch hẹn với chuyên viên nhân sự để được tư vấn trực tiếp nhé.",
+    "latency_ms": 2437.57
   },
   {
     "step": 1,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Hãy tra cứu thông tin hồ sơ và số ngày phép còn lại của nhân viên VF2026001.",
     "action_type": "TOOL_EXECUTION",
     "tool_name": "academic_query",
     "arguments": {
-      "student_id": "SV2026001"
+      "employee_id": "VF2026001"
     },
-    "observation": {},
-    "latency_ms": 799.12
+    "observation": {
+      "status": "SUCCESS",
+      "employee_id": "VF2026001",
+      "student_id": "VF2026001",
+      "data": {
+        "full_name": "Nguyễn Văn An",
+        "department": "Khối Sản xuất Ô tô điện VinFast Hải Phòng",
+        "role": "Kỹ sư Tự động hóa",
+        "leave_balance": 12,
+        "email": "an.nv@vinfast.vn",
+        "status": "Chính thức",
+        "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast"
+      }
+    },
+    "latency_ms": 2125.48
   },
   {
     "step": 2,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Hãy tra cứu thông tin hồ sơ và số ngày phép còn lại của nhân viên VF2026001.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
-    "output": "Chưa thể trả lời chi tiết do chưa nhận được dữ liệu từ MCP Server (hãy hoàn thành TODO 2.1).",
-    "latency_ms": 10.0
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Chào bạn,\n\nDưới đây là thông tin hồ sơ và số ngày phép còn lại của nhân viên VF2026001:\n\n*   **Họ và tên:** Nguyễn Văn An\n*   **Mã nhân viên:** VF2026001\n*   **Khối phòng ban:** Khối Sản xuất Ô tô điện VinFast Hải Phòng\n*   **Chức vụ:** Kỹ sư Tự động hóa\n*   **Email:** an.nv@vinfast.vn\n*   **Trạng thái:** Chính thức\n*   **Cán bộ HR phụ trách:** Trần Thị Mai - Ban Nhân sự VinFast\n*   **Số ngày phép còn lại:** 12 ngày\n\nNếu bạn cần hỗ trợ thêm, vui lòng cho tôi biết nhé.",
+    "latency_ms": 2993.54
+  },
+  {
+    "step": 1,
+    "query": "Tôi là nhân viên VF2026001, hãy đặt giúp tôi lịch hẹn làm việc với Ban Nhân sự vào lúc 09:00 ngày 15/09/2026 để tư vấn chế độ bảo hiểm sức khỏe Vinmec.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "schedule_appointment",
+    "arguments": {
+      "employee_id": "VF2026001",
+      "datetime_str": "09:00 15/09/2026",
+      "purpose": "Tư vấn chế độ bảo hiểm sức khỏe Vinmec"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "booking_id": "BK-VF2026001-99",
+      "employee_id": "VF2026001",
+      "student_id": "VF2026001",
+      "datetime": "09:00 15/09/2026",
+      "hr_officer": "Ban Nhân sự VinFast",
+      "advisor": "Ban Nhân sự VinFast",
+      "purpose": "Tư vấn chế độ bảo hiểm sức khỏe Vinmec",
+      "message": "Đặt lịch thành công cho nhân viên VF2026001 làm việc với Ban Nhân sự VinFast vào lúc 09:00 15/09/2026 (Mục đích: Tư vấn chế độ bảo hiểm sức khỏe Vinmec)."
+    },
+    "latency_ms": 3085.71
+  },
+  {
+    "step": 2,
+    "query": "Tôi là nhân viên VF2026001, hãy đặt giúp tôi lịch hẹn làm việc với Ban Nhân sự vào lúc 09:00 ngày 15/09/2026 để tư vấn chế độ bảo hiểm sức khỏe Vinmec.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Chào bạn,\n\nLịch hẹn làm việc của bạn với Ban Nhân sự VinFast vào lúc 09:00 ngày 15/09/2026 để tư vấn chế độ bảo hiểm sức khỏe Vinmec đã được đặt thành công. Mã đặt lịch của bạn là BK-VF2026001-99.\n\nNếu bạn có bất kỳ câu hỏi nào khác, đừng ngần ngại cho tôi biết nhé.",
+    "latency_ms": 2277.37
+  },
+  {
+    "step": 1,
+    "query": "Tôi là nhân viên VF2026001, hãy kiểm tra xem cán bộ nhân sự phụ trách tôi là ai, sau đó đặt lịch hẹn với cán bộ đó vào lúc 14:00 ngày 16/09/2026 để trao đổi về chế độ ngày phép.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "academic_query",
+    "arguments": {
+      "employee_id": "VF2026001"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "employee_id": "VF2026001",
+      "student_id": "VF2026001",
+      "data": {
+        "full_name": "Nguyễn Văn An",
+        "department": "Khối Sản xuất Ô tô điện VinFast Hải Phòng",
+        "role": "Kỹ sư Tự động hóa",
+        "leave_balance": 12,
+        "email": "an.nv@vinfast.vn",
+        "status": "Chính thức",
+        "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast"
+      }
+    },
+    "latency_ms": 2359.98
+  },
+  {
+    "step": 2,
+    "query": "Tôi là nhân viên VF2026001, hãy kiểm tra xem cán bộ nhân sự phụ trách tôi là ai, sau đó đặt lịch hẹn với cán bộ đó vào lúc 14:00 ngày 16/09/2026 để trao đổi về chế độ ngày phép.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "schedule_appointment",
+    "arguments": {
+      "employee_id": "VF2026001",
+      "datetime_str": "14:00 16/09/2026",
+      "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast",
+      "purpose": "Trao đổi về chế độ ngày phép"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "booking_id": "BK-VF2026001-99",
+      "employee_id": "VF2026001",
+      "student_id": "VF2026001",
+      "datetime": "14:00 16/09/2026",
+      "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast",
+      "advisor": "Trần Thị Mai - Ban Nhân sự VinFast",
+      "purpose": "Trao đổi về chế độ ngày phép",
+      "message": "Đặt lịch thành công cho nhân viên VF2026001 làm việc với Trần Thị Mai - Ban Nhân sự VinFast vào lúc 14:00 16/09/2026 (Mục đích: Trao đổi về chế độ ngày phép)."
+    },
+    "latency_ms": 870.1
+  },
+  {
+    "step": 3,
+    "query": "Tôi là nhân viên VF2026001, hãy kiểm tra xem cán bộ nhân sự phụ trách tôi là ai, sau đó đặt lịch hẹn với cán bộ đó vào lúc 14:00 ngày 16/09/2026 để trao đổi về chế độ ngày phép.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Hoàn tất mục tiêu đặt lịch từ kết quả quan sát.",
+    "output": "Tôi đã đặt lịch hẹn thành công với Ban Nhân sự VinFast cho bạn.",
+    "latency_ms": 898.87
+  },
+  {
+    "step": 1,
+    "query": "Hãy kiểm tra thông tin nhân viên có mã VF9999999 và số ngày phép của họ.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "academic_query",
+    "arguments": {
+      "employee_id": "VF9999999",
+      "student_id": "VF9999999"
+    },
+    "observation": {
+      "status": "NOT_FOUND",
+      "message": "Không tìm thấy dữ liệu nhân viên / hồ sơ có mã 'VF9999999'"
+    },
+    "latency_ms": 929.29
+  },
+  {
+    "step": 2,
+    "query": "Hãy kiểm tra thông tin nhân viên có mã VF9999999 và số ngày phép của họ.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Xử lý trường hợp không tìm thấy nhân viên (Anti-Hallucination).",
+    "output": "Rất tiếc, mã nhân viên bạn cung cấp không tồn tại trong hệ thống nhân sự VinFast.",
+    "latency_ms": 888.73
   }
 ]

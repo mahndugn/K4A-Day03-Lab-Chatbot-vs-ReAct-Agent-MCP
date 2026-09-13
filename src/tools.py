@@ -11,41 +11,53 @@ from typing import Dict, Any
 # ==============================================================================
 
 TOOLS_SCHEMA = [
-    # Tool 1: Đã được định nghĩa mẫu sẵn cho Học viên tham khảo
+    # Tool 1: Tra cứu thông tin hồ sơ và số ngày phép nhân viên VinFast
     {
         "name": "academic_query",
-        "description": "Tra cứu hồ sơ và thông tin học vụ của sinh viên VinUni bằng mã sinh viên.",
+        "description": "Tra cứu hồ sơ thông tin nhân sự VinFast: họ tên, khối phòng ban, chức vụ, cán bộ HR phụ trách và số ngày phép còn lại bằng mã nhân viên (ví dụ: 'VF2026001').",
         "parameters": {
             "type": "object",
             "properties": {
+                "employee_id": {
+                    "type": "string",
+                    "description": "Mã nhân viên VinFast cần tra cứu (ví dụ: 'VF2026001')"
+                },
                 "student_id": {
                     "type": "string",
-                    "description": "Mã sinh viên cần tra cứu (ví dụ: 'SV2026001')"
+                    "description": "Mã định danh nhân viên hoặc sinh viên dự phòng (ví dụ: 'VF2026001' hoặc 'SV2026001')"
                 }
             },
-            "required": ["student_id"]
+            "required": ["employee_id"]
         }
     },
     
     # --------------------------------------------------------------------------
-    # TODO 1.2: HỌC VIÊN HOÀN THIỆN TOOL SCHEMA CHO 'schedule_appointment'
-    # 🎯 YÊU CẦU THIẾT KẾ SCHEMA (JSON SCHEMA STANDARD):
-    # 1. Tool dùng để đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.
-    # 2. Thiết kế các tham số (properties) để LLM trích xuất:
-    #    - student_id (string): Mã sinh viên cần đặt lịch (ví dụ: 'SV2026001')
-    #    - datetime_str (string): Thời gian hẹn (ví dụ: '14:00 15/09/2026')
-    #    - advisor_name (string): Tên cố vấn học tập
-    # 3. Khai báo danh sách các trường bắt buộc (required).
+    # [TASK 1.2 - HOÀN THIỆN] TOOL SCHEMA CHO 'schedule_appointment' (VinFast HR)
     # --------------------------------------------------------------------------
     {
         "name": "schedule_appointment",
-        "description": "Đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.",
+        "description": "Đặt lịch hẹn làm việc hoặc tư vấn chính sách nhân sự, bảo hiểm, chế độ ngày phép với Cán bộ / Chuyên viên Ban Nhân sự VinFast.",
         "parameters": {
             "type": "object",
             "properties": {
-                # TODO 1.2: Khai báo các thuộc tính tham số cho Tool tại đây...
+                "employee_id": {
+                    "type": "string",
+                    "description": "Mã nhân viên VinFast cần đặt lịch (ví dụ: 'VF2026001')"
+                },
+                "datetime_str": {
+                    "type": "string",
+                    "description": "Thời gian hẹn làm việc (ví dụ: '09:00 15/09/2026')"
+                },
+                "hr_officer": {
+                    "type": "string",
+                    "description": "Tên chuyên viên hoặc cán bộ nhân sự phụ trách cuộc hẹn (ví dụ: 'Trần Thị Mai - Ban Nhân sự VinFast')"
+                },
+                "purpose": {
+                    "type": "string",
+                    "description": "Mục đích buổi làm việc (ví dụ: 'Tư vấn chế độ bảo hiểm sức khỏe', 'Giải quyết ngày phép', 'Thủ tục thâm niên')"
+                }
             },
-            "required": [] # TODO 1.2: Khai báo danh sách các trường bắt buộc tại đây...
+            "required": ["employee_id", "datetime_str"]
         }
     }
 ]
@@ -55,6 +67,26 @@ TOOLS_SCHEMA = [
 # ==============================================================================
 
 MOCK_DATABASE = {
+    # Dữ liệu nhân viên VinFast (Chủ đề 2.1 - Trợ lý Nhân sự VinFast)
+    "VF2026001": {
+        "full_name": "Nguyễn Văn An",
+        "department": "Khối Sản xuất Ô tô điện VinFast Hải Phòng",
+        "role": "Kỹ sư Tự động hóa",
+        "leave_balance": 12,
+        "email": "an.nv@vinfast.vn",
+        "status": "Chính thức",
+        "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast"
+    },
+    "VF2026002": {
+        "full_name": "Trần Thị Bình",
+        "department": "Khối R&D Pin xe điện VinFast",
+        "role": "Chuyên viên R&D",
+        "leave_balance": 10,
+        "email": "binh.tt@vinfast.vn",
+        "status": "Chính thức",
+        "hr_officer": "Lê Hoàng Nam - Ban Nhân sự VinFast"
+    },
+    # Dữ liệu dự phòng sinh viên VinUni mẫu
     "SV2026001": {
         "full_name": "Nguyễn Văn An",
         "class": "AI-K4",
@@ -74,31 +106,45 @@ MOCK_DATABASE = {
 }
 
 
-def execute_academic_query(student_id: str) -> str:
-    """Thực thi tra cứu học vụ theo mã sinh viên"""
-    student = MOCK_DATABASE.get(student_id.strip().upper())
-    if student:
+def execute_academic_query(student_id: str = None, employee_id: str = None) -> str:
+    """Thực thi tra cứu thông tin nhân viên VinFast (hoặc hồ sơ học vụ dự phòng)"""
+    target_id = (employee_id or student_id or "").strip().upper()
+    record = MOCK_DATABASE.get(target_id)
+    if record:
         return json.dumps({
             "status": "SUCCESS",
-            "student_id": student_id,
-            "data": student
+            "employee_id": target_id,
+            "student_id": target_id,
+            "data": record
         }, ensure_ascii=False)
     else:
         return json.dumps({
             "status": "NOT_FOUND",
-            "message": f"Không tìm thấy dữ liệu sinh viên có mã '{student_id}'"
+            "message": f"Không tìm thấy dữ liệu nhân viên / hồ sơ có mã '{target_id}'"
         }, ensure_ascii=False)
 
 
-def execute_schedule_appointment(student_id: str, datetime_str: str, advisor_name: str = "PGS.TS Nguyễn Văn A") -> str:
-    """Thực thi đặt lịch hẹn tư vấn học vụ"""
+def execute_schedule_appointment(
+    employee_id: str = None,
+    student_id: str = None,
+    datetime_str: str = "",
+    hr_officer: str = None,
+    advisor_name: str = None,
+    purpose: str = "Tư vấn chính sách nhân sự"
+) -> str:
+    """Thực thi đặt lịch hẹn làm việc với Ban Nhân sự VinFast"""
+    target_id = (employee_id or student_id or "VF2026001").strip().upper()
+    officer = hr_officer or advisor_name or "Ban Nhân sự VinFast"
     return json.dumps({
         "status": "SUCCESS",
-        "booking_id": f"BK-{student_id}-99",
-        "student_id": student_id,
+        "booking_id": f"BK-{target_id}-99",
+        "employee_id": target_id,
+        "student_id": target_id,
         "datetime": datetime_str,
-        "advisor": advisor_name,
-        "message": f"Đặt lịch thành công cho sinh viên {student_id} với {advisor_name} vào lúc {datetime_str}."
+        "hr_officer": officer,
+        "advisor": officer,
+        "purpose": purpose,
+        "message": f"Đặt lịch thành công cho nhân viên {target_id} làm việc với {officer} vào lúc {datetime_str} (Mục đích: {purpose})."
     }, ensure_ascii=False)
 
 

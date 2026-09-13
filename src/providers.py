@@ -38,25 +38,27 @@ class MockOfflineProvider(BaseLLMProvider):
         prompt_lower = prompt.lower()
         
         # Mô phỏng nhận diện intent gọi Tool
-        if "sv2026001" in prompt_lower and "đặt lịch" in prompt_lower:
+        if ("vf2026001" in prompt_lower or "sv2026001" in prompt_lower) and ("đặt lịch" in prompt_lower or "hẹn" in prompt_lower):
+            emp_id = "VF2026001" if "vf2026001" in prompt_lower else "SV2026001"
             return {
                 "type": "tool_call",
                 "tool_name": "schedule_appointment",
-                "arguments": {"student_id": "SV2026001", "datetime_str": "14:00 15/09/2026", "advisor_name": "PGS.TS Nguyễn Văn A"},
-                "thought": "Người dùng yêu cầu đặt lịch hẹn tư vấn cho sinh viên SV2026001. Tôi sẽ gọi tool schedule_appointment."
+                "arguments": {"employee_id": emp_id, "student_id": emp_id, "datetime_str": "09:00 15/09/2026", "hr_officer": "Trần Thị Mai - Ban Nhân sự VinFast"},
+                "thought": f"Người dùng yêu cầu đặt lịch hẹn làm việc cho {emp_id}. Tôi sẽ gọi tool schedule_appointment."
             }
-        elif "sv2026001" in prompt_lower or "tra cứu" in prompt_lower:
+        elif "vf2026001" in prompt_lower or "sv2026001" in prompt_lower or "tra cứu" in prompt_lower or "ngày phép" in prompt_lower:
+            emp_id = "VF2026001" if "vf2026001" in prompt_lower else "SV2026001"
             return {
                 "type": "tool_call",
                 "tool_name": "academic_query",
-                "arguments": {"student_id": "SV2026001"},
-                "thought": "Người dùng muốn tra cứu thông tin học vụ của sinh viên SV2026001. Tôi sẽ gọi tool academic_query."
+                "arguments": {"employee_id": emp_id, "student_id": emp_id},
+                "thought": f"Người dùng muốn tra cứu thông tin nhân sự của {emp_id}. Tôi sẽ gọi tool academic_query."
             }
         else:
             return {
                 "type": "text",
-                "content": f"[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-                "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool."
+                "content": f"[Mock Agent Response]: Xin chào! Theo quy chế nhân sự VinFast, mỗi nhân viên chính thức có 12 ngày phép năm và được hưởng chế độ bảo hiểm sức khỏe Vinmec.",
+                "thought": "Câu hỏi chung về quy chế nhân sự, trả lời trực tiếp không cần gọi Tool."
             }
 
 
